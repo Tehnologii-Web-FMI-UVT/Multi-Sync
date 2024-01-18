@@ -1,0 +1,65 @@
+﻿@using Microsoft.AspNetCore.Html
+@using RazorPartialToString.Services
+@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+    IRazorPartialToStringRenderer partialToStringRenderer = (IRazorPartialToStringRenderer)ViewBag.partialToStringRenderer;
+    async Task<HtmlString> RenderRazorViewToNAppViewAsync(string name, string viewPath, bool encode = true)
+    {
+        var result = await partialToStringRenderer.RenderPartialToStringAsync<EmptyModel>($"~/Views/App/{viewPath}", new EmptyModel());
+        var htmlEncoded = System.Web.HttpUtility.HtmlEncode(result);
+        var finalResult = $"<script id=\"{name}\" type=\"text/html\" encoded=\"{(encode ? "true" : "false")}\">{htmlEncoded}</script>";
+        return new HtmlString(finalResult);
+    }
+}
+
+<html>
+<head>
+    <link href="~/css/shared/bootstrap/bootstrap.css" rel="stylesheet" />
+    <link href="~/css/shared/bootstrap/bootstrap-grid.css" rel="stylesheet" />
+    <link href="~/css/shared/bootstrap/bootstrap-reboot.css" rel="stylesheet" />
+    <link href="~/css/shared/bootstrap/bootstrap-utilities.css" rel="stylesheet" />
+
+    <link href="~/css/shared/DSelect2.css" rel="stylesheet" />
+    <link href="~/css/shared/DSimpleDropdown.css" rel="stylesheet" />
+    <link href="~/css/shared/DTabsV2.css" rel="stylesheet" />
+
+    <link href="~/css/app/Base.css" rel="stylesheet" />
+    <link href="~/css/app/Menu.css" rel="stylesheet" />
+    <link href="~/css/app/NToastr.css" rel="stylesheet" />
+    <link href="~/css/app/Structure.css" rel="stylesheet" />
+
+    <script src="~/js/shared/jquery/jquery.js"></script>
+    <script src="~/js/shared/knockout/KnockoutJs.js"></script>
+    <script src="~/js/shared/navigo/navigo.js"></script>
+    <script src="~/js/shared/Utils.js"></script>
+    @*<script src="~/js/shared/KO/Ko.*.*js"></script>*@
+    <script src="~/js/shared/KO/Ko.DSelect2.js"></script>
+    <script src="~/js/shared/NAppNavigo.js"></script>
+</head>
+<body>
+    <div>{{App}}</div>
+
+    @*Page views*@
+    @await RenderRazorViewToNAppViewAsync("AboutPage", "Pages/AboutPage.cshtml")
+    @await RenderRazorViewToNAppViewAsync("HomePage", "Pages/HomePage.cshtml")
+    @await RenderRazorViewToNAppViewAsync("PeoplePage", "Pages/PeoplePage.cshtml")
+
+    @*Share views*@
+    @await RenderRazorViewToNAppViewAsync("_AppLayout", "Shared/_AppLayout.cshtml")
+    @await RenderRazorViewToNAppViewAsync("_AppMenu", "Shared/_Menu.cshtml")
+    @await RenderRazorViewToNAppViewAsync("_AppHeader", "Shared/_Header.cshtml")
+
+    @*Shared scripts*@
+    <script src="~/js/app/header/App_Header.js"></script>
+    <script src="~/js/app/menu/App_Menu.js"></script>
+
+    @*Page scripts*@
+    <script src="~/js/app/pages/App_AboutPage.js"></script>
+    <script src="~/js/app/pages/App_HomePage.js"></script>
+    <script src="~/js/app/pages/App_PeoplePage.js"></script>
+
+    <script src="~/js/app/RentalEnvAdminApp.js"></script>
+</body>
+</html>

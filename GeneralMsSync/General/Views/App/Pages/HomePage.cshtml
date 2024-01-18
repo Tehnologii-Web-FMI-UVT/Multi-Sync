@@ -1,0 +1,13 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+
+<h1>This is the home page</h1>
+<button data-bind="click: GoToAboutPage">Got to about page</button>
+
+<input type="text" data-bind="value: TargeText" />
+<button data-bind="click: SelectItemMan">Select item</button>
+
+<div data-bind="dselect2:{ target: SelectedItem, showAllCount: 0, startEmpty: false, placeholder: 'Select people', clearable: true, optionsText: 'firstName', key: 'id', params: { PageNumber: 0, NumberOfItemsPerPage: 100, OrderColumnIndex: 0, OrderAscOrDesc: true }, onSelectItem: OnItemSelected, url: '/api/People/GetPeoplePage' }"></div>
